@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "continuous-food-delivery",
   "version": "0.0.1",
   "private": true,
