@@ -1,0 +1,54 @@
+version: 2.1
+orbs:
+  node: circleci/node@4.1     # Used for the Frontend tests
+  python: circleci/python@1.2 # Used for the Backend tests
+
+parameters:
+  run-frontend:
+    type: boolean
+    default: false
+  run-backend:
+    type: boolean
+    default: false
+
+jobs:
+  frontend-test:
+    docker:
+      - image: cimg/node:15.1
+    steps:
+      - checkout
+      - node/install-packages:
+          with-cache: true
+      - run:
+          name: Run tests
+          command: npm test
+
+  backend-test:
+    docker:
+      - image: cimg/python:3.8
+    resource_class: large
+    parallelism: 4
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+      - run:
+          name: Run tests
+          command: |
+            mkdir tmp
+            circleci tests glob "backend/openapi_server/test/test_*.py" | circleci tests split > /tmp/tests_to_run
+            pytest $(cat tmp/tests_to_run) --junitxml=tmp/test_results.xml --html=test_results.html
+      - store_test_results:
+          path: tmp/test_results.xml
+      - store_artifacts:
+          path: tmp
+
+workflows:
+  frontend:
+    when: << pipeline.parameters.run-frontend >>
+    jobs:
+      - frontend-test
+  backend-test:
+    when: << pipeline.parameters.run-backend >>
+    jobs:
+      - backend-test
