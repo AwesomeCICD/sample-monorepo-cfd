@@ -75,9 +75,9 @@ class TestDatabase(BaseDBTestCase):
         assert len(models.Cart.query_by_host("1.1.1.1").items) == 1
         assert test_item.cart_id == "1.1.1.1"
 
-    # def test_image_add_failure(self):
-    #     with pytest.raises(TypeError):
-    #         models.Image.add({"bad"})
+    def test_image_add_failure(self):
+        with pytest.raises(TypeError):
+            models.Image.add({"bad"})
 
     def test_get_image(self):
         assert models.Image.get_image(0) is None
