@@ -19,6 +19,7 @@ jobs:
       - checkout
       - node/install-packages:
           with-cache: true
+          app-dir: frontend
       - run:
           name: Run tests
           command: npm test
