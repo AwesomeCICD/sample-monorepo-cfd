@@ -18,11 +18,12 @@ jobs:
     resource_class: small
     steps:
       - checkout
+      - python/install-packages:
+          pkg-manager: pip
+          app-dir: backend
       - run:
           name: Lint
-          command: |
-            python3 -m pip install --upgrade pylint pylint_flask_sqlalchemy
-            python3 -m pylint --rcfile backend/pylintrc backend/openapi_server
+          command: python3 -m pylint --rcfile backend/pylintrc backend/openapi_server
   backend-test:
     docker:
       - image: cimg/python:3.8
