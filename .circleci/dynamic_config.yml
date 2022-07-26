@@ -12,18 +12,17 @@ parameters:
     default: false
 
 jobs:
-  frontend-test:
+  backend-lint:
     docker:
-      - image: cimg/node:15.1
+      - image: cimg/python:3.8
+    resource_class: small
     steps:
       - checkout
-      - node/install-packages:
-          with-cache: true
-          app-dir: frontend
       - run:
-          name: Run tests
-          command: npm test
-
+          name: Lint
+          command: |
+            python3 -m pip install --upgrade pylint pylint_flask_sqlalchemy
+            python3 -m pylint --rcfile backend/pylintrc backend/openapi_server
   backend-test:
     docker:
       - image: cimg/python:3.8
@@ -38,19 +37,53 @@ jobs:
           name: Run tests
           command: |
             mkdir tmp
-            circleci tests glob "backend/openapi_server/test/test_*.py" | circleci tests split > /tmp/tests_to_run
-            pytest $(cat tmp/tests_to_run) --junitxml=tmp/test_results.xml --html=test_results.html
+            circleci tests glob "backend/openapi_server/test/test_*.py" | circleci tests split > tmp/tests_to_run
+            pytest $(cat tmp/tests_to_run) --junitxml=tmp/test_results.xml --html=tmp/test_results.html
       - store_test_results:
           path: tmp/test_results.xml
       - store_artifacts:
           path: tmp
+  frontend-lint:
+    docker:
+      - image: cimg/node:15.1
+    resource_class: small
+    steps:
+      - checkout
+      - node/install-packages:
+          with-cache: true
+          app-dir: frontend
+      - run:
+          name: Lint
+          command: npm --prefix frontend run lint
+  frontend-test:
+    docker:
+      - image: cimg/node:15.1
+    resource_class: large
+    parameters:
+      test-depth:
+        type: enum
+        enum: ["e2e", "unit"]
+        default: unit
+    steps:
+      - checkout
+      - node/install-packages:
+          with-cache: true
+          app-dir: frontend
+      - run:
+          name: Run tests
+          command: npm --prefix frontend run test:<<parameters.test-depth>>
 
 workflows:
   test-frontend:
     when: << pipeline.parameters.run-frontend >>
     jobs:
-      - frontend-test
+      - frontend-lint
+      - frontend-test:
+          matrix:
+            parameters:
+              test-depth: ["e2e", "unit"]
   test-backend:
     when: << pipeline.parameters.run-backend >>
     jobs:
+      - backend-lint
       - backend-test
