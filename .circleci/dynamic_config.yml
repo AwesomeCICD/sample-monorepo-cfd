@@ -38,9 +38,9 @@ jobs:
             mkdir tmp
             circleci tests glob "backend/openapi_server/test/test_*.py" | circleci tests split > /tmp/tests_to_run
             pytest $(cat tmp/tests_to_run) --junitxml=tmp/test_results.xml --html=test_results.html
-      - persist_test_results:
+      - store_test_results:
           path: tmp/test_results.xml
-      - save_artifacts:
+      - store_artifacts:
           path: tmp
 
 workflows:
