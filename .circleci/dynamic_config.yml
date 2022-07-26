@@ -17,22 +17,31 @@ jobs:
       - image: cimg/node:15.1
     steps:
       - checkout
-      - node/install-packages
+      - node/install-packages:
+          with-cache: true
       - run:
           name: Run tests
           command: npm test
 
-
   backend-test:
     docker:
       - image: cimg/python:3.8
+    resource_class: large
+    parallelism: 4
     steps:
       - checkout
       - python/install-packages:
           pkg-manager: pip
       - run:
           name: Run tests
-          command: pytest
+          command: |
+            mkdir tmp
+            circleci tests glob "backend/openapi_server/test/test_*.py" | circleci tests split > /tmp/tests_to_run
+            pytest $(cat tmp/tests_to_run) --junitxml=tmp/test_results.xml --html=test_results.html
+      - persist_test_results:
+          path: tmp/test_results.xml
+      - save_artifacts:
+          path: tmp
 
 workflows:
   frontend:
