@@ -46,11 +46,11 @@ jobs:
           path: tmp
 
 workflows:
-  frontend:
+  test-frontend:
     when: << pipeline.parameters.run-frontend >>
     jobs:
       - frontend-test
-  backend-test:
+  test-backend:
     when: << pipeline.parameters.run-backend >>
     jobs:
       - backend-test

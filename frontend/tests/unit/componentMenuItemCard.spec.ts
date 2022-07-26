@@ -27,7 +27,7 @@ describe('CartItemCard.vue', () => {
         const wrapper = shallowMount(MenuItemCard, {
             props: {menuItem}
         })
-        expect(wrapper.text()).toContain('Fried potato')
+        expect(wrapper.text()).toContain('Fried potato rectangles')
     })
 
 })
