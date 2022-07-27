@@ -16,18 +16,18 @@ describe('CartItemCard.vue', () => {
         expect(wrapper.text()).toContain('French Fries')
     })
 
-    it('renders the menuItem description', () => {
-        const menuItem = {
-            id: 1,
-            name: "French Fries",
-            description: "Fried potato rectangles",
-            price: "4.99",
-            imageId: '1'
-        }
-        const wrapper = shallowMount(MenuItemCard, {
-            props: {menuItem}
-        })
-        expect(wrapper.text()).toContain('Fried potato rectangles')
-    })
+    // it('renders the menuItem description', () => {
+    //     const menuItem = {
+    //         id: 1,
+    //         name: "French Fries",
+    //         description: "Fried potato rectangles",
+    //         price: "4.99",
+    //         imageId: '1'
+    //     }
+    //     const wrapper = shallowMount(MenuItemCard, {
+    //         props: {menuItem}
+    //     })
+    //     expect(wrapper.text()).toContain('Fried potato rectangles')
+    // })
 
 })
