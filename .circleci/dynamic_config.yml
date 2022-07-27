@@ -1,5 +1,6 @@
 version: 2.1
 orbs:
+  aws/ecr: circleci/ecr@8.1.2
   node: circleci/node@4.1     # Used for the Frontend tests
   python: circleci/python@1.2 # Used for the Backend tests
 
@@ -86,3 +87,13 @@ workflows:
     jobs:
       - backend-lint
       - backend-test
+      - aws-ecr/build-and-push-image:
+          context: aws
+          create-repo: true
+          path: backend
+          public-registry: true
+          repo: awesomecicd
+          requires:
+            - backend-lint
+            - backend-test
+          tag: $CIRCLE_BUILD_NUM

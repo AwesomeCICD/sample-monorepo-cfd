@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils"
-import MenuItemCard from "@/components/MenuItemCard.vue"
+import MenuItemCard from "../../src/components/MenuItemCard.vue"
 
 describe('CartItemCard.vue', () => {
     it('renders the menuItem prop data', () => {

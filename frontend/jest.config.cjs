@@ -7,10 +7,11 @@ module.exports = {
     "ts"
   ],
   transform: {
-    "\\.[jt]sx?$": "babel-jest",
-    ".*\\.(vue)$": "vue-jest"
+    "^.+\\.js$": "babel-jest",
+    "^.+\\.vue$": "vue-jest"
   },
   moduleNameMapper: {
-    "@/(.*)": "<rootDir>/src/$1",
+    "@/components/*": "<rootDir>/src/components/$1",
+    "@/(.*)": "<rootDir>/src/$1"
   }
 }

@@ -65,22 +65,22 @@ class TestImageController(BaseTestCase):
         )
         assert mock_delete.call_count == 1
 
-    # @mock.patch.object(models.Image, "get_image")
-    # def test_get_image(self, mock_get):
-    #     """Test case for get_image
+    @mock.patch.object(models.Image, "get_image")
+    def test_get_image(self, mock_get):
+        """Test case for get_image
 
-    #     Get image
-    #     """
-    #     mock_get.return_value = self.mock_model
-    #     headers = {
-    #         "Accept": "image/png application/json",
-    #     }
-    #     response = self.client.open(
-    #         "/CFD/1.0.0/image/{image_id}".format(image_id=0),
-    #         method="GET",
-    #         headers=headers,
-    #     )
-    #     self.assert200(response)
+        Get image
+        """
+        mock_get.return_value = self.mock_model
+        headers = {
+            "Accept": "image/png application/json",
+        }
+        response = self.client.open(
+            "/CFD/1.0.0/image/{image_id}".format(image_id=0),
+            method="GET",
+            headers=headers,
+        )
+        self.assert200(response)
 
 
 if __name__ == "__main__":
