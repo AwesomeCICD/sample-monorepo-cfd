@@ -58,7 +58,7 @@ jobs:
           command: npm --prefix frontend run lint
   frontend-test:
     docker:
-      - image: cimg/node:15.1
+      - image: cimg/node:15.1-browsers
     resource_class: large
     parameters:
       test-depth:
