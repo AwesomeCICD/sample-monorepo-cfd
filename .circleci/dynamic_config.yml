@@ -75,15 +75,13 @@ jobs:
           command: npm --prefix frontend run test:<<parameters.test-depth>>
 
 workflows:
-  test-frontend:
+  frontend:
     when: << pipeline.parameters.run-frontend >>
     jobs:
       - frontend-lint
       - frontend-test:
-          matrix:
-            parameters:
-              test-depth: ["e2e", "unit"]
-  test-backend:
+          test-depth: unit
+  backend:
     when: << pipeline.parameters.run-backend >>
     jobs:
       - backend-lint
