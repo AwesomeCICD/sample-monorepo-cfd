@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  aws/ecr: circleci/ecr@8.1.2
+  aws-ecr: circleci/aws-ecr@8.1.2
   node: circleci/node@4.1     # Used for the Frontend tests
   python: circleci/python@1.2 # Used for the Backend tests
 
