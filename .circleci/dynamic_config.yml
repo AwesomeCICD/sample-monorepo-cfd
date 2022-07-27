@@ -58,7 +58,7 @@ jobs:
           command: npm --prefix frontend run lint
   frontend-test:
     docker:
-      - image: cimg/node:15.1
+      - image: cimg/node:15.1-browsers
     resource_class: large
     parameters:
       test-depth:
@@ -72,18 +72,16 @@ jobs:
           app-dir: frontend
       - run:
           name: Run tests
-          command: npm --prefix frontend run test:<<parameters.test-depth>>
+          command: npm --prefix frontend run test:<< parameters.test-depth >>
 
 workflows:
-  test-frontend:
+  frontend:
     when: << pipeline.parameters.run-frontend >>
     jobs:
       - frontend-lint
       - frontend-test:
-          matrix:
-            parameters:
-              test-depth: ["e2e", "unit"]
-  test-backend:
+          test-depth: unit
+  backend:
     when: << pipeline.parameters.run-backend >>
     jobs:
       - backend-lint
